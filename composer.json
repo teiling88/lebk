@@ -1,0 +1,15 @@
+{
+  "name": "thomas/lebk",
+  "authors": [
+    {
+      "name": "Thomas Eiling",
+      "email": "teiling88@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "SwagLebk\\": "src/"
+    }
+  },
+  "require": {}
+}
