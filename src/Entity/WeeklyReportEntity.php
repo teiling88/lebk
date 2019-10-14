@@ -4,15 +4,33 @@ namespace SwagLebk\Entity;
 
 class WeeklyReportEntity
 {
-    public int $id;
+    /** @var null|int */
+    public $id;
 
-    public int $weeknumber;
+    /** @var int */
+    public $weeknumber;
 
-    public string $positive;
+    /** @var string */
+    public $positive;
 
-    public string $negative;
+    /** @var string */
+    public $negative;
 
-    public string $learned;
+    /** @var string */
+    public $learned;
+
+    public function __construct(int $weeknumber, string $positive, string $negative, string $learned)
+    {
+        $this->weeknumber = $weeknumber;
+        $this->positive = $positive;
+        $this->negative = $negative;
+        $this->learned = $learned;
+    }
+
+    public static function fromPostValues(array $data): WeeklyReportEntity
+    {
+        return new self((int)$data['weeknumber'], $data['positive'], $data['negative'], $data['learned']);
+    }
 
     public function toDatabaseArray(): array
     {
@@ -25,14 +43,60 @@ class WeeklyReportEntity
         ];
     }
 
-    public function fromDatabaseArray(array $data): WeeklyReportEntity
+    public static function fromDatabaseArray(array $data): WeeklyReportEntity
     {
-        $this->id = (int) $data['id'];
-        $this->weeknumber = (int) $data['weeknumber'];
-        $this->positive = $data['positive'];
-        $this->negative = $data['negative'];
-        $this->learned = $data['learned'];
+        $new = new self((int) $data['weeknumber'],$data['positive'],$data['negative'],$data['learned']);
+        $new->setId((int) $data['id']);
 
-        return $this;
+        return $new;
+    }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getWeeknumber(): int
+    {
+        return $this->weeknumber;
+    }
+
+    public function setWeeknumber(int $weeknumber): void
+    {
+        $this->weeknumber = $weeknumber;
+    }
+
+    public function getPositive(): string
+    {
+        return $this->positive;
+    }
+
+    public function setPositive(string $positive): void
+    {
+        $this->positive = $positive;
+    }
+
+    public function getNegative(): string
+    {
+        return $this->negative;
+    }
+
+    public function setNegative(string $negative): void
+    {
+        $this->negative = $negative;
+    }
+
+    public function getLearned(): string
+    {
+        return $this->learned;
+    }
+
+    public function setLearned(string $learned): void
+    {
+        $this->learned = $learned;
     }
 }

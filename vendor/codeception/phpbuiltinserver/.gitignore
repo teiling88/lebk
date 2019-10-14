@@ -1,0 +1,7 @@
+.idea
+composer.phar
+bin
+tests/log/*
+!tests/log/.gitkeep
+tests/support/_generated
+vendor
