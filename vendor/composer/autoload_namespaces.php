@@ -6,4 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Codeception' => array($vendorDir . '/codeception/phpbuiltinserver/src'),
+    'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
 );

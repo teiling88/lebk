@@ -7,15 +7,7 @@ require_once __DIR__.'/autoload.php';
 $message = '';
 
 if (isset($_POST['submit'])) {
-    $entity = new WeeklyReportEntity();
-    foreach ($_POST as $key => $value) {
-        if (property_exists(WeeklyReportEntity::class, $key)) {
-            if ($key === 'weeknumber') {
-                $value = (int) $value;
-            }
-            $entity->{$key} = $value;
-        }
-    }
+    $entity = WeeklyReportEntity::fromPostValues($_POST);
 
     $result = $repository->create($entity);
     if ($result) {

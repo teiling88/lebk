@@ -2,11 +2,14 @@
 
 namespace SwagLebk\Database;
 
+use SQLite3;
+
 class Setup
 {
-    private \SQLite3 $connection;
+    /** @var SQLite3 */
+    private $connection;
 
-    public function __construct(\SQLite3 $connection)
+    public function __construct(SQLite3 $connection)
     {
         $this->connection = $connection;
     }
@@ -23,5 +26,10 @@ class Setup
                 learned    TEXT
             );'
         );
+    }
+
+    public function drop(): void
+    {
+        $this->connection->exec('DROP TABLE IF EXISTS weekly_reports;');
     }
 }

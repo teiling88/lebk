@@ -2,13 +2,15 @@
 
 namespace SwagLebk\Repository;
 
+use SQLite3;
 use SwagLebk\Entity\WeeklyReportEntity;
 
 class WeeklyReportRepository
 {
-    private \SQLite3 $connection;
+    /** @var SQLite3 */
+    private $connection;
 
-    public function __construct(\SQLite3 $connection)
+    public function __construct(SQLite3 $connection)
     {
         $this->connection = $connection;
     }
@@ -21,12 +23,7 @@ class WeeklyReportRepository
         $rawData = $this->connection->query('SELECT * FROM weekly_reports');
         $entities = [];
         while ($row = $rawData->fetchArray(SQLITE3_ASSOC)) {
-            $weeklyReport = new WeeklyReportEntity();
-            $weeklyReport->id = $row['id'];
-            $weeklyReport->weeknumber = $row['weeknumber'];
-            $weeklyReport->positive = $row['positive'];
-            $weeklyReport->negative = $row['negative'];
-            $weeklyReport->learned = $row['learned'];
+            $weeklyReport = WeeklyReportEntity::fromDatabaseArray($row);
             $entities[] = $weeklyReport;
         }
 
@@ -40,43 +37,44 @@ class WeeklyReportRepository
 
         $row = $query->execute()->fetchArray(SQLITE3_ASSOC);
 
-        $weeklyReport = new WeeklyReportEntity();
-        $weeklyReport->id = $row['id'];
-        $weeklyReport->weeknumber = $row['weeknumber'];
-        $weeklyReport->positive = $row['positive'];
-        $weeklyReport->negative = $row['negative'];
-        $weeklyReport->learned = $row['learned'];
-
-        return $weeklyReport;
+        return WeeklyReportEntity::fromDatabaseArray($row);
     }
 
     public function create(WeeklyReportEntity $entity): bool
     {
-        $sql = 'INSERT INTO weekly_reports 
-                VALUES (
-                        null,
-                        ' . $entity->weeknumber . ",
-                        '" . $entity->positive . "',
-                        '" . $entity->negative . "',
-                        '" . $entity->learned . "'
-                        )";
+        $sql = 'INSERT INTO weekly_reports VALUES (null, :week, :positive, :negative, :learned)';
 
-        return $this->connection->exec($sql);
+        $query = $this->connection->prepare($sql);
+        $query->bindValue(':week', $entity->getWeeknumber());
+        $query->bindValue(':positive', $entity->getPositive());
+        $query->bindValue(':negative', $entity->getNegative());
+        $query->bindValue(':learned', $entity->getLearned());
+
+        $result = $query->execute();
+        return false !== $result;
     }
 
     public function update(WeeklyReportEntity $entity): bool
     {
         $sql = 'UPDATE weekly_reports 
-                SET weeknumber = ' . $entity->weeknumber . ",
-                    positive = '" . $entity->positive . "',
-                    negative = '" . $entity->negative . "',
-                    learned = '" . $entity->learned . "'
-                WHERE id = " . $entity->id;
+                SET weeknumber = :week,
+                    positive = :positive,
+                    negative = :negative,
+                    learned = :learned
+                WHERE id = :id';
 
-        return $this->connection->exec($sql);
+        $query = $this->connection->prepare($sql);
+        $query->bindValue(':week', $entity->getWeeknumber());
+        $query->bindValue(':positive', $entity->getPositive());
+        $query->bindValue(':negative', $entity->getNegative());
+        $query->bindValue(':learned', $entity->getLearned());
+        $query->bindValue(':id', $entity->getId());
+
+        $result = $query->execute();
+        return false !== $result;
     }
 
-    public function deleteById(int $reportId)
+    public function deleteById(int $reportId): void
     {
         $sql = 'DELETE FROM weekly_reports WHERE id = :id';
         $query = $this->connection->prepare($sql);

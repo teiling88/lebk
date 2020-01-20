@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
             if (in_array($key, ['weeknumber', 'id'])) {
                 $value = (int) $value;
             }
-            $report->{$key} = $value;
+            $report->{'set' . ucwords($key)}($value);
         }
     }
 
@@ -41,30 +41,30 @@ if (isset($_POST['submit'])) {
     <?= $message ?>
     <div class="row">
         <div class="col-sm">
-            <form method="post" action="edit.php?id=<?= $report->id ?>">
+            <form method="post" action="edit.php?id=<?= $report->getId() ?>">
                 <div class="form-group row">
                     <label for="weeknumber" class="col-sm-2 col-form-label">Weeknumber</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="weeknumber" id="weeknumber"
-                               value="<?= $report->weeknumber ?>"/>
+                               value="<?= $report->getWeeknumber() ?>"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="positive" class="col-sm-2 col-form-label">Positive</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="positive" name="positive"><?= $report->positive ?></textarea>
+                        <textarea class="form-control" id="positive" name="positive"><?= $report->getPositive() ?></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="negative" class="col-sm-2 col-form-label">Negative</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="negative" name="negative"><?= $report->negative ?></textarea>
+                        <textarea class="form-control" id="negative" name="negative"><?= $report->getNegative() ?></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="learned" class="col-sm-2 col-form-label">Learned</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="learned" name="learned"><?= $report->learned ?></textarea>
+                        <textarea class="form-control" id="learned" name="learned"><?= $report->getLearned() ?></textarea>
                     </div>
                 </div>
                 <button type="submit" name="submit" class="btn btn-primary">Submit</button>

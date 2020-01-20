@@ -1,11 +1,6 @@
 <?php declare(strict_types=1);
 
-use SwagLebk\Entity\WeeklyReportEntity;
-
 require_once __DIR__.'/autoload.php';
-
-$entity = new WeeklyReportEntity();
-$entity->id = 1;
 
 $weeklyReports = $repository->read();
 ?>
@@ -30,16 +25,16 @@ $weeklyReports = $repository->read();
                 <tbody>
                 <?php foreach ($weeklyReports as $report): ?>
                     <tr>
-                        <td><?= $report->id ?></td>
-                        <td><?= $report->weeknumber ?></td>
-                        <td><?= $report->positive ?></td>
-                        <td><?= $report->negative ?></td>
-                        <td><?= $report->learned ?></td>
+                        <td><?= $report->getId() ?></td>
+                        <td><?= $report->getWeeknumber() ?></td>
+                        <td><?= $report->getPositive() ?></td>
+                        <td><?= $report->getNegative() ?></td>
+                        <td><?= $report->getLearned() ?></td>
                         <td>
-                            <a href="edit.php?id=<?= $report->id ?>">
+                            <a href="edit.php?id=<?= $report->getId() ?>">
                                 <img src="templates/edit.svg" alt="delete"/>
                             </a>
-                            <a href="delete.php?id=<?= $report->id ?>">
+                            <a href="delete.php?id=<?= $report->getId() ?>">
                                 <img src="templates/delete.svg" alt="delete"/>
                             </a>
                         </td>
